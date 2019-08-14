@@ -1,8 +1,10 @@
 import {combineReducers} from 'redux';
-import {playlists} from './playlists';
+import playlists from './playlists';
+import playlistsDetails from './playlistDatail';
 
 const reducers = combineReducers({
-  playlists
+  playlists,
+  playlistsDetails
 });
 
 export default reducers;

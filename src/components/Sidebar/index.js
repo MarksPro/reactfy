@@ -83,7 +83,7 @@ class Sidebar extends Component{
             </li>
             {this.props.playlists.data.map(item => (
                 <li key={item.id}>
-                  <Link to={`playlists/${item.id}`}>{item.title}</Link>
+                  <Link to={`/playlists/${item.id}`}>{item.title}</Link>
                 </li>
               ))
             }
