@@ -1,8 +1,14 @@
 import React from 'react';
 import {Container, Current, Volume, Progress, Controls, Time, ProgressSlider} from './style';
-import volumeIcon from '../../assets/images/volume.svg';
 import Slider from 'rc-slider';
+import Sound from 'react-sound';
 
+// CONNECT TO REDUX
+import {connect} from 'react-redux';
+
+import PropTypes from 'prop-types';
+
+import volumeIcon from '../../assets/images/volume.svg';
 import shuffleIcon from '../../assets/images/shuffle.svg';
 import backwardIcon from '../../assets/images/backward.svg';
 import playIcon from '../../assets/images/play.svg';
@@ -10,8 +16,17 @@ import pauseIcon from '../../assets/images/pause.svg';
 import forwardIcon from '../../assets/images/forward.svg';
 import repeatIcon from '../../assets/images/repeat.svg';
 
-const Player = () => (
+const Player = (props) => (
   <Container>
+    {console.log("SOUND: ", !!props.player.currentSong ? 'vazio' : 'music')}
+    
+    {!!props.player.currentSong &&
+        <Sound 
+          url={props.player.currentSong.file}
+          playStatus={props.player.status}
+        />
+    }
+
     <Current>
       <img src="https://http2.mlstatic.com/cd-nickelback-dark-horse-963280-D_NQ_NP_694115-MLB25206899986_122016-F.jpg" alt="Nickelback"/>
       <div>
@@ -63,4 +78,17 @@ const Player = () => (
   </Container>
 );
 
-export default Player;
+Player.propTypes = {
+  player: PropTypes.shape({
+    currentSong: PropTypes.shape({
+      file: PropTypes.string
+    }),
+    status: PropTypes.string
+  }).isRequired
+}
+
+const mapStateToProps = state => ({
+  player: state.player
+})
+
+export default connect(mapStateToProps)(Player);

@@ -7,6 +7,7 @@ import PlusIcon from '../../assets/images/plus.svg';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Creators as PlaylistsDetailsActions} from '../../store/ducks/playlistDatail';
+import {Creators as PlayerActions} from '../../store/ducks/player';
 
 import PropTypes from 'prop-types';
 
@@ -15,6 +16,7 @@ import Loading from '../../components/Loading';
 class Playlist extends Component {
 
   static propTypes = {
+    loadSong: PropTypes.func.isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.number
@@ -82,7 +84,7 @@ class Playlist extends Component {
               </tr>
             : (
               playlist.songs.map(song => (
-                <tr key={song.id}>
+                <tr key={song.id} onDoubleClick={() => this.props.loadSong(song)}>
                   <td><img src={PlusIcon} alt="adicionar"/></td>
                   <td>{song.title}</td>
                   <td>{song.author}</td>
@@ -115,6 +117,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => 
-  bindActionCreators(PlaylistsDetailsActions, dispatch);
+  bindActionCreators({...PlaylistsDetailsActions, ...PlayerActions}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Playlist);
