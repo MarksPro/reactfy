@@ -1,15 +1,31 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
+// STYLE COMPONENTS
 import {Container, NewPlaylist, Nav} from './style';
 
+// CONNECT TO REDUX
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Creators as PlaylistsActions} from '../../store/ducks/playlists';
 
+// IMPORT VALIDATION TO PROPS
+import PropTypes from 'prop-types';
+
 import addPlayListIcon from '../../assets/images/add_playlist.svg';
 
 class Sidebar extends Component{
+
+  // VALIDATION
+  static propTypes = {
+    getPlaylistsRequest: PropTypes.func.isRequired,
+    playlists: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string
+      }))
+    }).isRequired
+  }
 
   componentDidMount(){
     this.props.getPlaylistsRequest();
