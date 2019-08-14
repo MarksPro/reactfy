@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 
 // STYLE COMPONENTS
 import {Container, NewPlaylist, Nav} from './style';
+import Loading from '../Loading';
 
 // CONNECT TO REDUX
 import {connect} from 'react-redux';
@@ -18,6 +19,7 @@ class Sidebar extends Component{
 
   // VALIDATION
   static propTypes = {
+    loading: PropTypes.bool,
     getPlaylistsRequest: PropTypes.func.isRequired,
     playlists: PropTypes.shape({
       data: PropTypes.arrayOf(PropTypes.shape({
@@ -77,12 +79,15 @@ class Sidebar extends Component{
           <Nav>
             <li>
               <span>Playlists</span>
+              {this.props.playlists.loading && <Loading/>}
             </li>
             {this.props.playlists.data.map(item => (
-              <li key={item.id}>
-                <Link to={`playlists/${item.id}`}>{item.title}</Link>
-              </li>
-            ))}
+                <li key={item.id}>
+                  <Link to={`playlists/${item.id}`}>{item.title}</Link>
+                </li>
+              ))
+            }
+            
           </Nav>
         </div>
         <NewPlaylist>
