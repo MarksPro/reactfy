@@ -1,5 +1,3 @@
-import { statements } from "@babel/template";
-
 export const Types = {
   GET_REQUEST: 'playlists/GET_REQUEST',
   GET_SUCCESS: 'playlists/GET_SUCCESS'
@@ -25,10 +23,12 @@ export const Creators = {
   getPlaylistsRequest: () => ({
     type: Types.GET_REQUEST
   }),
-  getPlaylistsSuccess: data => ({
-    types: Types.GET_SUCCESS,
+  getPlaylistsSuccess: data => {
+    console.log(Types.GET_SUCCESS)
+  return ({
+    type: Types.GET_SUCCESS,
     payload: {
       data
     }
-  })
+  })}
 }
