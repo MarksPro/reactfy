@@ -1,32 +1,55 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Container, Title, List, Playlist} from '../Browse/style';
 
-const Browse = () => (
-  <Container>
-    <Title>Navegar</Title>
-    <List>
-      <Playlist to="/playlists/1">
-        <img src="https://http2.mlstatic.com/cd-nickelback-dark-horse-963280-D_NQ_NP_694115-MLB25206899986_122016-F.jpg" alt="Nickelback"/>
-        <strong>Nickelback</strong>
-        <p>Nickelback é uma banda de rock do Canadá formada em Hanna em 1995 por Chad Kroeger, Mike Kroeger, Ryan Peake e Brandon Kroeger.</p>
-      </Playlist>
-      <Playlist to="/playlists/1">
-        <img src="https://http2.mlstatic.com/cd-nickelback-dark-horse-963280-D_NQ_NP_694115-MLB25206899986_122016-F.jpg" alt="Nickelback"/>
-        <strong>Nickelback</strong>
-        <p>Nickelback é uma banda de rock do Canadá formada em Hanna em 1995 por Chad Kroeger, Mike Kroeger, Ryan Peake e Brandon Kroeger.</p>
-      </Playlist>
-      <Playlist to="/playlists/1">
-        <img src="https://http2.mlstatic.com/cd-nickelback-dark-horse-963280-D_NQ_NP_694115-MLB25206899986_122016-F.jpg" alt="Nickelback"/>
-        <strong>Nickelback</strong>
-        <p>Nickelback é uma banda de rock do Canadá formada em Hanna em 1995 por Chad Kroeger, Mike Kroeger, Ryan Peake e Brandon Kroeger.</p>
-      </Playlist>
-      <Playlist to="/playlists/1">
-        <img src="https://http2.mlstatic.com/cd-nickelback-dark-horse-963280-D_NQ_NP_694115-MLB25206899986_122016-F.jpg" alt="Nickelback"/>
-        <strong>Nickelback</strong>
-        <p>Nickelback é uma banda de rock do Canadá formada em Hanna em 1995 por Chad Kroeger, Mike Kroeger, Ryan Peake e Brandon Kroeger.</p>
-      </Playlist>
-    </List>
-  </Container>
-);
+// CONNECT TO REDUX
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {Creators as PlaylistsActions} from '../../store/ducks/playlists';
 
-export default Browse;
+import PropTypes from 'prop-types';
+
+class Browse extends Component {
+
+  // VALIDATION
+  static propTypes = {
+    getPlaylistsRequest: PropTypes.func.isRequired,
+    playlists: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
+        title: PropTypes.string,
+        thumbnail: PropTypes.string,
+        description: PropTypes.string
+      }))
+    }).isRequired
+  }
+
+  componentDidMount(){
+    this.props.getPlaylistsRequest();
+  }
+
+  render(){
+    return (
+      <Container>
+        <Title>Navegar</Title>
+        <List>
+          {this.props.playlists.data.map(item => (
+            <Playlist key={item.id} to={`/playlists/${item.id}`}>
+              <img src={item.thumbnail} alt={item.title}/>
+              <strong>{item.title}</strong>
+              <p>{item.description}</p>
+            </Playlist>
+          ))}
+        </List>
+      </Container>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  playlists: state.playlists
+});
+
+const mapDispatchToProps = dispatch => 
+  bindActionCreators(PlaylistsActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Browse);
