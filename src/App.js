@@ -1,6 +1,9 @@
 import React from 'react';
 import {BrowserRouter} from 'react-router-dom';
 
+import {Provider} from 'react-redux';
+import store from './store';
+
 // Estilização geral e layout
 import GlobalStyle from './styles/global';
 import {Wrapper, Container, Content} from './styles/components';
@@ -17,19 +20,21 @@ import './config/reactotron';
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <GlobalStyle/>
-        <Wrapper>
-          <Container>
-            <Sidebar/>
-            <Content>
-              <Header/>
-              <Routes/>
-            </Content>
-          </Container>
-          <Player/>
-        </Wrapper>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <GlobalStyle/>
+          <Wrapper>
+            <Container>
+              <Sidebar/>
+              <Content>
+                <Header/>
+                <Routes/>
+              </Content>
+            </Container>
+            <Player/>
+          </Wrapper>
+        </BrowserRouter>
+      </Provider>
     </>
   );
 }
