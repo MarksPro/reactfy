@@ -3,8 +3,6 @@ import {Container, Current, Volume, Progress, Controls, Time, ProgressSlider} fr
 import Slider from 'rc-slider';
 import Sound from 'react-sound';
 
-import reactotron from '../../config/reactotron';
-
 // CONNECT TO REDUX
 import {connect} from 'react-redux';
 import {Creators as PlayerActions} from '../../store/ducks/player';
@@ -28,6 +26,7 @@ const Player = (props) => (
         <Sound 
           url={props.player.currentSong.file}
           playStatus={props.player.status}
+          onFinishedPlaying={props.next}
         />
     }
 
@@ -49,7 +48,7 @@ const Player = (props) => (
         <button>
           <img src={shuffleIcon} alt="aleatorio"/>
         </button>
-        <button>
+        <button onClick={props.prev}>
           <img src={backwardIcon} alt="voltar"/>
         </button>
 
@@ -66,7 +65,7 @@ const Player = (props) => (
             )
         }
         
-        <button>
+        <button onClick={props.next}>
           <img src={forwardIcon} alt="proxima"/>
         </button>
         <button>
@@ -107,7 +106,11 @@ Player.propTypes = {
       author: PropTypes.string
     }),
     status: PropTypes.string
-  }).isRequired
+  }).isRequired,
+  play: PropTypes.func.isRequired,
+  pause: PropTypes.func.isRequired,
+  next: PropTypes.func.isRequired,
+  prev: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
