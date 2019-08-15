@@ -28,11 +28,16 @@ const Player = (props) => (
     }
 
     <Current>
-      <img src="https://http2.mlstatic.com/cd-nickelback-dark-horse-963280-D_NQ_NP_694115-MLB25206899986_122016-F.jpg" alt="Nickelback"/>
-      <div>
-        <span>Someday</span>
-        <small>Nickelback</small>
-      </div>
+      {!!props.player.currentSong &&
+        <>
+          <img src={props.player.currentSong.thumbnail} alt={props.player.currentSong.title}/>
+          <div>
+            <span>{props.player.currentSong.title}</span>
+            <small>{props.player.currentSong.author}</small>
+          </div>
+        </>
+      }
+     
     </Current>
 
     <Progress>
@@ -81,7 +86,10 @@ const Player = (props) => (
 Player.propTypes = {
   player: PropTypes.shape({
     currentSong: PropTypes.shape({
-      file: PropTypes.string
+      file: PropTypes.string,
+      thumbnail: PropTypes.string,
+      title: PropTypes.string,
+      author: PropTypes.string
     }),
     status: PropTypes.string
   }).isRequired
