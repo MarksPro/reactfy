@@ -27,6 +27,7 @@ const Player = (props) => (
           url={props.player.currentSong.file}
           playStatus={props.player.status}
           onFinishedPlaying={props.next}
+          onPlaying={props.playing}
         />
     }
 
@@ -73,7 +74,7 @@ const Player = (props) => (
         </button>
       </Controls>
       <Time>
-        <spam>1:39</spam>
+        <span>{props.position}</span>
         <ProgressSlider>
           <Slider
             railStyle={{background: '#404040', borderRadius: 10}}
@@ -81,7 +82,7 @@ const Player = (props) => (
             handleStyle={{border: 0}}
           />
         </ProgressSlider>
-        <spam>4:24</spam>
+        <span>{props.duration}</span>
       </Time>
     </Progress>
 
@@ -105,16 +106,28 @@ Player.propTypes = {
       title: PropTypes.string,
       author: PropTypes.string
     }),
-    status: PropTypes.string
+    status: PropTypes.string,
+    position: PropTypes.string,
+    duration: PropTypes.string
   }).isRequired,
   play: PropTypes.func.isRequired,
   pause: PropTypes.func.isRequired,
   next: PropTypes.func.isRequired,
-  prev: PropTypes.func.isRequired
+  prev: PropTypes.func.isRequired,
+  playing: PropTypes.func.isRequired
+}
+
+const msToTime = (duration) => {
+  let seconds = parseInt((duration / 1000) % 60, 10);
+  const minutes = parseInt((duration / (1000 * 60) % 60), 10);
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  return `${minutes}:${seconds}`
 }
 
 const mapStateToProps = state => ({
-  player: state.player
+  player: state.player,
+  position: msToTime(state.player.position),
+  duration: msToTime(state.player.duration)
 })
 
 const mapDispatchToProps = dispatch => 
