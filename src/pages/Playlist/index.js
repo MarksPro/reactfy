@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Header, SongList} from './style';
+import {Container, Header, SongList, SongItem} from './style';
 import ClockIcon from '../../assets/images/clock.svg';
 import PlusIcon from '../../assets/images/plus.svg';
 
@@ -17,6 +17,9 @@ class Playlist extends Component {
 
   static propTypes = {
     loadSong: PropTypes.func.isRequired,
+    currentSong: PropTypes.shape({
+      id: PropTypes.number
+    }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
         id: PropTypes.number
@@ -37,6 +40,10 @@ class Playlist extends Component {
       }),
       loading: PropTypes.bool
     }).isRequired
+  }
+
+  state = {
+    selectSong: null
   }
 
   componentDidMount(){
@@ -84,13 +91,19 @@ class Playlist extends Component {
               </tr>
             : (
               playlist.songs.map(song => (
-                <tr key={song.id} onDoubleClick={() => this.props.loadSong(song)}>
+                <SongItem 
+                  key={song.id} 
+                  onClick={() => this.setState({selectSong: song.id})} 
+                  onDoubleClick={() => this.props.loadSong(song)}
+                  selected={this.state.selectSong === song.id}
+                  playing={this.props.currentSong && this.props.currentSong.id === song.id}
+                >
                   <td><img src={PlusIcon} alt="adicionar"/></td>
                   <td>{song.title}</td>
                   <td>{song.author}</td>
                   <td>{song.album}</td>
                   <td>4:24</td>
-                </tr>
+                </SongItem>
               ))
             )
            } 
@@ -113,7 +126,8 @@ class Playlist extends Component {
 }
  
 const mapStateToProps = state => ({
-  playlistsDetails: state.playlistsDetails
+  playlistsDetails: state.playlistsDetails,
+  currentSong: state.player.currentSong
 });
 
 const mapDispatchToProps = dispatch => 
